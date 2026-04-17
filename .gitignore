@@ -1,0 +1,40 @@
+# Environment variables
+.env
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Database
+instance/
+*.db
+
+# Uploaded files (VERY IMPORTANT)
+uploads/
+uploads/documents/
+uploads/selfies/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Test files
+test.py
+gemini_test.py

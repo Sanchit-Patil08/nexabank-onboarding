@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexaBank — Intelligent Onboarding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="static/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- LANDING -->
+<div class="screen active" id="landing">
+  <div class="bg-grid"></div><div class="bg-glow"></div>
+  <div class="landing-content">
+    <div class="bank-logo"><div class="logo-icon">🏦</div><div class="logo-text">NexaBank</div></div>
+    <h1 class="landing-title">Banking that begins<br>with <span>intelligence</span></h1>
+    <p class="landing-sub">Open your account in under 5 minutes. AI-powered onboarding — KYC, document verification, risk scoring, all in one flow.</p>
+    <button class="btn-primary" onclick="startOnboarding()">Start Verification →</button>
+    <button class="btn-ghost" onclick="window.location='/admin-login'">Admin Portal</button>
+    <div class="trust-badges">
+      <div class="badge"><span class="badge-icon">🔒</span> AES-256 Encrypted</div>
+      <div class="badge"><span class="badge-icon">⚡</span> AI-powered KYC</div>
+      <div class="badge"><span class="badge-icon">✅</span> RBI Compliant</div>
+      <div class="badge"><span class="badge-icon">🛡</span> Tamper Detection</div>
+    </div>
+  </div>
+</div>
+
+<!-- ONBOARDING -->
+<div class="screen" id="onboarding">
+  <div class="onboard-header">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="logo-icon" style="width:36px;height:36px;font-size:16px;border-radius:10px;">🏦</div>
+      <div class="logo-text" style="font-size:1.3rem;">NexaBank</div>
+    </div>
+    <div class="session-info">
+      <div class="session-dot"></div>
+      <span id="sessionId">Session: —</span>
+      <span style="color:var(--border)">|</span>
+      <span id="sessionTimer">00:00</span>
+      <span style="color:var(--border)">|</span>
+      <span id="apiStatus" style="color:var(--green);">● API Connected</span>
+    </div>
+  </div>
+  <div class="progress-container">
+    <div class="progress-steps">
+      <div class="step-item active" id="step-1"><div class="step-circle">1</div><div class="step-label">Identity</div></div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step-item" id="step-2"><div class="step-circle">2</div><div class="step-label">Documents</div></div>
+      <div class="step-line" id="line-2"></div>
+      <div class="step-item" id="step-3"><div class="step-circle">3</div><div class="step-label">Biometrics</div></div>
+      <div class="step-line" id="line-3"></div>
+      <div class="step-item" id="step-4"><div class="step-circle">4</div><div class="step-label">OTP</div></div>
+      <div class="step-line" id="line-4"></div>
+      <div class="step-item" id="step-5"><div class="step-circle">5</div><div class="step-label">Activation</div></div>
+    </div>
+  </div>
+  <div class="onboard-body">
+    <div class="chat-panel">
+      <div class="chat-header">
+        <div class="ai-avatar">🤖</div>
+        <div>
+          <h3 style="font-size:.95rem;font-weight:600;">ARIA — NexaBank AI</h3>
+          <div class="ai-status">● Online &amp; Secure</div>
+        </div>
+      </div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="quick-actions" id="quickActions"></div>
+      <div class="chat-input-area">
+        <textarea class="chat-input" id="chatInput" placeholder="Type your response..." rows="1"
+          onkeydown="handleKey(event)" oninput="autoResize(this)" disabled></textarea>
+        <button class="send-btn" id="sendBtn" onclick="sendMsg()" disabled>➤</button>
+      </div>
+    </div>
+    <div class="info-panel">
+      <div class="info-card">
+        <h4>Application Summary</h4>
+        <div class="info-row"><span class="info-key">App ID</span><span class="info-val mono" id="inf-appid" style="font-size:.7rem;">—</span></div>
+        <div class="info-row"><span class="info-key">Name</span><span class="info-val" id="inf-name">—</span></div>
+        <div class="info-row"><span class="info-key">Date of Birth</span><span class="info-val" id="inf-dob">—</span></div>
+        <div class="info-row"><span class="info-key">Email</span><span class="info-val" id="inf-email">—</span></div>
+        <div class="info-row"><span class="info-key">ID Type</span><span class="info-val" id="inf-idtype">—</span></div>
+        <div class="info-row"><span class="info-key">Risk Level</span><span class="risk-badge pending" id="inf-risk">Evaluating</span></div>
+      </div>
+      <div class="info-card">
+        <h4>Verification Checks</h4>
+        <div class="verify-step"><div class="verify-icon pending" id="vchk-id">1</div><span>Identity Verification</span></div>
+        <div class="verify-step"><div class="verify-icon pending" id="vchk-doc">2</div><span>Document Validation</span></div>
+        <div class="verify-step"><div class="verify-icon pending" id="vchk-bio">3</div><span>Biometric Match</span></div>
+        <div class="verify-step"><div class="verify-icon pending" id="vchk-otp">4</div><span>OTP Verified</span></div>
+        <div class="verify-step"><div class="verify-icon pending" id="vchk-risk">5</div><span>Risk Assessment</span></div>
+      </div>
+      <div class="security-bar">
+        <span style="color:var(--gold);font-size:1.1rem;">🔐</span>
+        <div><div style="color:var(--text);font-size:.8rem;font-weight:500;">End-to-End Encrypted</div><div style="font-size:.7rem;margin-top:2px;">TLS 1.3 + AES-256</div></div>
+      </div>
+      <div class="info-card">
+        <h4>AI Activity Log</h4>
+        <div id="aiLog" style="max-height:200px;overflow-y:auto;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="screen" id="success-screen">
+  <div class="bg-grid"></div><div class="bg-glow"></div>
+  <div class="success-content">
+    <div class="success-icon">✅</div>
+    <h1 class="success-title">Welcome to NexaBank!</h1>
+    <p style="color:var(--text2);margin-bottom:40px;" id="sc-subtitle">Your account has been created and activated successfully.</p>
+    <div class="account-card">
+      <h4 style="font-size:.75rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin-bottom:20px;">Account Details</h4>
+      <div class="info-row"><span class="info-key">Application ID</span><span class="info-val mono" id="sc-appid">—</span></div>
+      <div class="info-row"><span class="info-key">Account Holder</span><span class="info-val" id="sc-name">—</span></div>
+      <div class="info-row"><span class="info-key">Account Number</span><div class="account-number" id="sc-acno">—</div></div>
+      <div class="info-row"><span class="info-key">IFSC Code</span><span class="info-val" id="sc-ifsc">—</span></div>
+      <div class="info-row"><span class="info-key">Account Type</span><span class="info-val">Savings (Digital)</span></div>
+      <div class="info-row"><span class="info-key">Risk Score</span><span class="risk-badge low" id="sc-risk">—</span></div>
+      <div class="info-row"><span class="info-key">KYC Status</span><span class="info-val" style="color:var(--green)">✓ Verified</span></div>
+      <div class="info-row"><span class="info-key">Activated On</span><span class="info-val" id="sc-date">—</span></div>
+    </div>
+    <button class="btn-primary" onclick="window.location.reload()">Open Another Account</button>
+    <button class="btn-ghost" onclick="window.location='/admin-login'">Admin Dashboard →</button>
+  </div>
+</div>
+
+<!-- REVIEW MODAL -->
+<div class="modal-overlay" id="reviewModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;margin-bottom:24px;">Application Review</h3>
+    <div id="modalContent"></div>
+    <div style="display:flex;gap:12px;margin-top:24px;justify-content:flex-end;">
+      <button class="act-btn reject" onclick="submitDecision('Rejected')">✕ Reject</button>
+      <button class="act-btn review" onclick="submitDecision('More Info')">? Request Info</button>
+      <button class="act-btn approve" onclick="submitDecision('Approved')">✓ Approve</button>
+    </div>
+  </div>
+</div>
+
+<script src="static/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexaBank — Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07090F;
+  --bg2: #0D1117;
+  --bg3: #161B24;
+  --gold: #C9A84C;
+  --gold2: #E8C97A;
+  --green: #10B981;
+  --red: #EF4444;
+  --text: #E2E8F0;
+  --text2: #8B949E;
+  --border: rgba(201,168,76,.18);
+  --gdim: rgba(201,168,76,.08);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Animated background */
+.bg-anim {
+  position: fixed; inset: 0; overflow: hidden; z-index: 0;
+}
+.bg-anim::before {
+  content: '';
+  position: absolute;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(201,168,76,.06) 0%, transparent 70%);
+  top: -200px; right: -200px;
+  animation: pulse 8s ease-in-out infinite;
+}
+.bg-anim::after {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(96,165,250,.04) 0%, transparent 70%);
+  bottom: -100px; left: -100px;
+  animation: pulse 10s ease-in-out infinite reverse;
+}
+.grid-overlay {
+  position: fixed; inset: 0;
+  background-image: linear-gradient(rgba(201,168,76,.04) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(201,168,76,.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 0;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1) translate(0,0); opacity: .6; }
+  50% { transform: scale(1.1) translate(-20px, 20px); opacity: 1; }
+}
+
+/* Card */
+.auth-container {
+  position: relative; z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 440px;
+  padding: 24px;
+  animation: fadeUp .5s ease forwards;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.brand {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 40px;
+}
+.logo-box {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  box-shadow: 0 0 30px rgba(201,168,76,.25);
+}
+.logo-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  letter-spacing: 1px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px;
+  width: 100%;
+  box-shadow: 0 24px 64px rgba(0,0,0,.5), 0 0 0 1px rgba(201,168,76,.05);
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 28px;
+  gap: 4px;
+}
+.tab-btn {
+  flex: 1;
+  padding: 9px;
+  border: none;
+  background: none;
+  color: var(--text2);
+  font-family: 'Outfit', sans-serif;
+  font-size: .88rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all .22s;
+}
+.tab-btn.active {
+  background: var(--gdim);
+  color: var(--gold);
+  border: 1px solid var(--border);
+}
+
+/* Form */
+.form-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.form-sub {
+  color: var(--text2);
+  font-size: .82rem;
+  margin-bottom: 24px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+.form-label {
+  display: block;
+  font-size: .78rem;
+  color: var(--text2);
+  margin-bottom: 6px;
+  font-weight: 500;
+  letter-spacing: .5px;
+}
+.form-input {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid rgba(255,255,255,.07);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: .9rem;
+  padding: 11px 14px;
+  border-radius: 10px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.form-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201,168,76,.1);
+}
+.form-input::placeholder { color: var(--text2); opacity: .7; }
+
+.submit-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  border: none;
+  color: #0D0A00;
+  font-family: 'Outfit', sans-serif;
+  font-size: .95rem;
+  font-weight: 600;
+  padding: 13px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: opacity .2s, transform .15s;
+  letter-spacing: .3px;
+}
+.submit-btn:hover { opacity: .9; transform: translateY(-1px); }
+.submit-btn:active { transform: translateY(0); }
+.submit-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+.divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 20px 0;
+  color: var(--text2);
+  font-size: .78rem;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,.07);
+}
+
+.admin-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: .8rem;
+  color: var(--text2);
+}
+.admin-link a {
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 500;
+}
+.admin-link a:hover { text-decoration: underline; }
+
+/* Error/Success messages */
+.alert {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: .82rem;
+  margin-bottom: 16px;
+  display: none;
+}
+.alert.error { background: rgba(239,68,68,.12); border: 1px solid rgba(239,68,68,.3); color: #fca5a5; display: block; }
+.alert.success { background: rgba(16,185,129,.12); border: 1px solid rgba(16,185,129,.3); color: #6ee7b7; display: block; }
+
+/* Trust row */
+.trust-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.trust-item {
+  display: flex; align-items: center; gap: 5px;
+  font-size: .72rem;
+  color: var(--text2);
+}
+
+/* Form hidden */
+.form-panel { display: none; }
+.form-panel.active { display: block; }
+
+/* Loading spinner in button */
+.btn-spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(0,0,0,.3);
+  border-top-color: #0D0A00;
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="bg-anim"></div>
+<div class="grid-overlay"></div>
+
+<div class="auth-container">
+  <div class="brand">
+    <div class="logo-box">🏦</div>
+    <div class="logo-name">NexaBank</div>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('login')">Sign In</button>
+      <button class="tab-btn" onclick="switchTab('register')">Create Account</button>
+    </div>
+
+    <div id="alert-msg" class="alert"></div>
+
+    <!-- LOGIN PANEL -->
+    <div class="form-panel active" id="panel-login">
+      <div class="form-title">Welcome back</div>
+      <div class="form-sub">Sign in to continue your application or track your account status.</div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" id="login-email" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="login-password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="submit-btn" id="login-btn" onclick="doLogin()">Sign In →</button>
+
+      <div class="divider">or</div>
+
+      <button class="submit-btn" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);font-weight:400;" onclick="demoLogin()">
+        Continue as Guest (Demo)
+      </button>
+    </div>
+
+    <!-- REGISTER PANEL -->
+    <div class="form-panel" id="panel-register">
+      <div class="form-title">Open your account</div>
+      <div class="form-sub">Create an account to save your progress and access your application anytime.</div>
+
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" id="reg-name" placeholder="Your full name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" id="reg-email" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="reg-password" placeholder="Min. 8 characters">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <input type="password" class="form-input" id="reg-confirm" placeholder="Re-enter password">
+      </div>
+      <button class="submit-btn" id="register-btn" onclick="doRegister()">Create Account →</button>
+    </div>
+
+    <div class="trust-row">
+      <div class="trust-item">🔒 256-bit SSL</div>
+      <div class="trust-item">✅ RBI Compliant</div>
+      <div class="trust-item">🛡 DPDP Act 2023</div>
+    </div>
+  </div>
+
+  <div class="admin-link">
+    Bank employee? <a href="/admin-login">Admin Portal →</a>
+  </div>
+</div>
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register')));
+  document.getElementById('panel-login').classList.toggle('active', tab==='login');
+  document.getElementById('panel-register').classList.toggle('active', tab==='register');
+  clearAlert();
+}
+
+function showAlert(msg, type='error') {
+  const el = document.getElementById('alert-msg');
+  el.textContent = msg;
+  el.className = 'alert ' + type;
+}
+function clearAlert() {
+  const el = document.getElementById('alert-msg');
+  el.className = 'alert';
+}
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  if (!email || !password) { showAlert('Please fill in all fields.'); return; }
+
+  const btn = document.getElementById('login-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="btn-spinner"></span>Signing in…';
+
+  try {
+    const res = await fetch('/api/user/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Login failed');
+    showAlert('✅ Welcome back, ' + data.name + '!', 'success');
+    setTimeout(() => window.location.href = '/', 800);
+  } catch(e) {
+    showAlert(e.message);
+    btn.disabled = false;
+    btn.textContent = 'Sign In →';
+  }
+}
+
+async function doRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value;
+  const confirm = document.getElementById('reg-confirm').value;
+
+  if (!name || !email || !password) { showAlert('Please fill in all fields.'); return; }
+  if (password.length < 8) { showAlert('Password must be at least 8 characters.'); return; }
+  if (password !== confirm) { showAlert('Passwords do not match.'); return; }
+
+  const btn = document.getElementById('register-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="btn-spinner"></span>Creating account…';
+
+  try {
+    const res = await fetch('/api/user/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ name, email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Registration failed');
+    showAlert('✅ Account created! Redirecting…', 'success');
+    setTimeout(() => window.location.href = '/', 800);
+  } catch(e) {
+    showAlert(e.message);
+    btn.disabled = false;
+    btn.textContent = 'Create Account →';
+  }
+}
+
+async function demoLogin() {
+  try {
+    const res = await fetch('/api/user/demo-login', {
+      method: 'POST',
+      credentials: 'include'
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Demo login failed');
+    window.location.href = '/';
+  } catch(e) {
+    showAlert('Could not start demo: ' + e.message);
+  }
+}
+
+// Enter key support
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    if (document.getElementById('panel-login').classList.contains('active')) doLogin();
+    else doRegister();
+  }
+});
+</script>
+</body>
+</html>
